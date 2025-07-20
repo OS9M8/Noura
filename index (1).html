@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مفاجأة لنورة</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #game-container {
+            margin: 0 auto;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(10, 35px);
+            grid-template-rows: repeat(10, 35px);
+            gap: 2px;
+            width: fit-content;
+        }
+
+        .cell {
+            width: 35px;
+            height: 35px;
+            background-color: black;
+        }
+
+        .wall {
+            background-color: #7e7e7e;
+        }
+
+        .worm {
+            background-image: url('https://em-content.zobj.net/thumbs/240/apple/354/worm_1fab1.png');
+            background-size: cover;
+        }
+
+        .cherry {
+            background-image: url('https://em-content.zobj.net/thumbs/240/apple/354/cherries_1f352.png');
+            background-size: cover;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 15px;
+            margin: 5px;
+            font-size: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>حركي الدودة وخليها توصل للكرزة 🍒</h2>
+    <div id="game-container"></div>
+
+    <div class="controls">
+        <div>
+            <button onclick="move('up')">⬆️</button>
+        </div>
+        <div>
+            <button onclick="move('left')">⬅️</button>
+            <button onclick="move('down')">⬇️</button>
+            <button onclick="move('right')">➡️</button>
+        </div>
+    </div>
+
+    <script>
+        const grid = [
+            "##########",
+            "#        #",
+            "# ###### #",
+            "# #    # #",
+            "# # ## # #",
+            "# # ## # #",
+            "# #    # #",
+            "# ###### #",
+            "#        #",
+            "##########"
+        ];
+
+        const container = document.getElementById("game-container");
+
+        let wormPos = { x: 1, y: 1 };
+        let cherryPos = { x: 8, y: 8 };
+
+        function drawGrid() {
+            container.innerHTML = "";
+            for (let y = 0; y < 10; y++) {
+                for (let x = 0; x < 10; x++) {
+                    const cell = document.createElement("div");
+                    cell.classList.add("cell");
+
+                    if (grid[y][x] === "#") {
+                        cell.classList.add("wall");
+                    }
+
+                    if (wormPos.x === x && wormPos.y === y) {
+                        cell.classList.add("worm");
+                    } else if (cherryPos.x === x && cherryPos.y === y) {
+                        cell.classList.add("cherry");
+                    }
+
+                    container.appendChild(cell);
+                }
+            }
+        }
+
+        function move(direction) {
+            let newX = wormPos.x;
+            let newY = wormPos.y;
+
+            if (direction === "up") newY--;
+            else if (direction === "down") newY++;
+            else if (direction === "left") newX--;
+            else if (direction === "right") newX++;
+
+            if (grid[newY][newX] === " ") {
+                wormPos = { x: newX, y: newY };
+                drawGrid();
+                checkWin();
+            }
+        }
+
+        function checkWin() {
+            if (wormPos.x === cherryPos.x && wormPos.y === cherryPos.y) {
+                setTimeout(() => {
+                    alert("إنتِ مش بس أغلى وأحن إنسانة عرفتها، إنتِ معنى الحب الحقيقي لكل مشاعري. وجودك بحياتي هو أروع نعمة، وأنتِ أجمل هدية من رب العالمين. حبك يسكن روحي ويخليني أحس بالأمان والسعادة اللي ما حسيت بيها مع أحد قبل ...\n\nاحبك مامتي 🥹🤍");
+                }, 100);
+            }
+        }
+
+        drawGrid();
+    </script>
+</body>
+</html>
